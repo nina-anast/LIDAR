@@ -6,8 +6,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.08078491298396502 0.09611063399580319 0.992086963863097 1.4057850781601715
-  position -21.530929093610254 -96.28135626603753 2.2813207316298687
+  orientation 0.08654114618435031 -0.1952085296550108 0.9769361596169054 0.8519745229951473
+  position -25.861386116365242 -20.67893395172602 -3.0089965548479176
 }
 TexturedBackground {
 }
@@ -15,71 +15,91 @@ TexturedBackgroundLight {
 }
 DEF ship Robot {
   children [
-    DEF propeller Propeller {
-      device RotationalMotor {
-        name "motor"
-        acceleration 50
-        maxVelocity 400
-        maxTorque 15
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 1
+        anchor -3.3 0 0
+        suspensionAxis 0 0 1
       }
-      fastHelix DEF FAST_HELIX Solid {
+      device [
+        DEF wheel RotationalMotor {
+          name "wheel"
+          maxVelocity 10000
+        }
+        DEF position PositionSensor {
+          name "position"
+        }
+      ]
+      endPoint Solid {
         translation -3.3 0 0
-        rotation 0 1 0 1.5708
         children [
-          DEF FAST_MAIN_HELIX_SHAPE Shape {
-            appearance PBRAppearance {
-              baseColorMap ImageTexture {
-                url [
-                  "blurred_helix.png"
-                ]
-              }
-              transparency 0.5
-              roughness 0.5
-              metalness 0
+          DEF propeller Propeller {
+            device RotationalMotor {
+              name "motor"
+              maxVelocity 400
+              maxTorque 15
             }
-            geometry Cylinder {
-              height 0.1
-              radius 0.3
+            fastHelix DEF FAST_HELIX Solid {
+              rotation 0 1 0 1.5708
+              children [
+                DEF FAST_MAIN_HELIX_SHAPE Shape {
+                  appearance PBRAppearance {
+                    baseColorMap ImageTexture {
+                      url [
+                        "blurred_helix.png"
+                      ]
+                    }
+                    transparency 0.5
+                    roughness 0.5
+                    metalness 0
+                  }
+                  geometry Cylinder {
+                    height 0.1
+                    radius 0.3
+                  }
+                }
+              ]
+            }
+            slowHelix Solid {
+              children [
+                DEF BLADE_SHAPE Pose {
+                  children [
+                    Shape {
+                      appearance PBRAppearance {
+                        baseColor 0.8 0.8 0.8
+                        roughness 1
+                        metalness 0
+                      }
+                      geometry Box {
+                        size 0.05 0.05 0.6
+                      }
+                    }
+                  ]
+                }
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0 0 0
+                  }
+                  geometry Cylinder {
+                    height 0.3
+                    radius 0.04
+                  }
+                }
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0 0 0
+                  }
+                  geometry Capsule {
+                    height 0.1
+                    radius 0.05
+                  }
+                }
+              ]
             }
           }
         ]
-      }
-      slowHelix Solid {
-        translation -3.3 0 0
-        children [
-          DEF BLADE_SHAPE Pose {
-            children [
-              Shape {
-                appearance PBRAppearance {
-                  baseColor 0.8 0.8 0.8
-                  roughness 1
-                  metalness 0
-                }
-                geometry Box {
-                  size 0.05 0.05 0.6
-                }
-              }
-            ]
-          }
-          Shape {
-            appearance PBRAppearance {
-              baseColor 0 0 0
-            }
-            geometry Cylinder {
-              height 0.3
-              radius 0.04
-            }
-          }
-          Shape {
-            appearance PBRAppearance {
-              baseColor 0 0 0
-            }
-            geometry Capsule {
-              height 0.1
-              radius 0.05
-            }
-          }
-        ]
+        physics Physics {
+        }
       }
     }
     DEF S Shape {
@@ -200,7 +220,7 @@ DEF ship Robot {
       angular 0.5
     }
   }
-  controller "test_controller_2"
+  controller "wheel_test"
 }
 Solid {
   children [
