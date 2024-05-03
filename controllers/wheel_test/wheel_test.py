@@ -19,7 +19,7 @@ def run_robot(robot):
         range_image = lidar.getRangeImage()
         k = position.getValue()
         
-        if k < 0.81 and k > 0.79:
+        if k < wheel_angle + 0.01 and k > wheel_angle - 0.01:
             if initial_time is None:  # Check if it's the first time entering the if condition
                 initial_time = time.time() * 1000.0  # Record the initial time
         
@@ -29,8 +29,8 @@ def run_robot(robot):
             if time_difference >= 10000:  # Check if 2 seconds have passed
                 wheel.setPosition(0.0)
         
-        # print(k)
-        print("{}".format(range_image))
+        print(k)
+        # print("{}".format(range_image))
 
 if __name__ == "__main__":
     my_robot = Robot()
