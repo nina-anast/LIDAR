@@ -6,8 +6,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.11745361530784552 0.2512692704397874 0.9607644883028168 0.9056521921002857
-  position -24.98571030554147 -20.87273295044511 5.386359814032443
+  orientation -0.03146358200714852 0.9748331586001544 0.22070422719315053 0.29051187525245714
+  position -125.91662127120034 -30.167850355794233 37.47705760884429
 }
 TexturedBackground {
 }
@@ -36,7 +36,7 @@ DEF ship Robot {
           DEF propeller Propeller {
             device RotationalMotor {
               name "motor"
-              maxVelocity 400
+              maxVelocity 10000
               maxTorque 15
             }
             fastHelix DEF FAST_HELIX Solid {
@@ -1058,4 +1058,25 @@ DEF water Fluid {
     }
   ]
   boundingObject USE S
+}
+DEF ball Solid {
+  translation 51.27 0 1.12
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.5 1
+      }
+      geometry Sphere {
+        radius 4
+      }
+    }
+  ]
+  immersionProperties [
+    DEF water ImmersionProperties {
+      fluidName "water"
+      dragForceCoefficients 0.01 0 0
+      dragTorqueCoefficients 1 0 0
+      viscousResistanceTorqueCoefficient 0.005
+    }
+  ]
 }
