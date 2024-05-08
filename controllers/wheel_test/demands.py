@@ -12,6 +12,7 @@ wheel_angle = 1.5
 
 # Lidar 
 
-threshold_distance = 10.0
+threshold_distance = 80.0
+ignored_distance = 3.0
 resolution = 900
-excluded_layers = 15
+excluded_layers = 14

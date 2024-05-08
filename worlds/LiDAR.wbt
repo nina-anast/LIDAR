@@ -6,8 +6,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.03146358200714852 0.9748331586001544 0.22070422719315053 0.29051187525245714
-  position -125.91662127120034 -30.167850355794233 37.47705760884429
+  orientation -0.1562440906684025 0.23990761708422384 0.9581399268354145 1.1939896666274348
+  position -143.44252480585104 -315.5123833343989 102.50335123998241
 }
 TexturedBackground {
 }
@@ -1071,7 +1071,7 @@ DEF ball Solid {
         baseColor 1 0.5 1
       }
       geometry Sphere {
-        radius 4
+        radius 8
       }
     }
   ]

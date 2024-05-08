@@ -10,40 +10,29 @@ def detect_objects(matrix, threshold_distance):
     rows, cols = matrix.shape
     
     # Iterate over rows and columns of the matrix
-    for col in range(cols - excluded_layers):
-        for row in range(rows):
+    for row in range(rows - excluded_layers):
+        for col in range(cols):
             distance = matrix[row, col]  # Retrieve the distance value
-            if distance < threshold_distance:
-                if object_start is None:
-                    object_start = (row, col)
-            elif object_start is not None:
-                object_end = (row, col - 1)
-                # Check if the new object has the same row as the previous one
-                if len(objects) > 0 and objects[-1][0][0] == object_start[0]:
-                    # Merge objects by updating the end coordinate of the previous object
-                    objects[-1] = (objects[-1][0], object_end)
-                else:
+            if distance >= ignored_distance:  # Ignore distances smaller than 3
+                if distance < threshold_distance:
+                    if object_start is None:
+                        object_start = (row, col)
+                elif object_start is not None:
+                    object_end = (row, col)
                     objects.append((object_start, object_end))
-                object_start = None
-    
-    # If an object extends to the end of the matrix
+                    object_start = None
     if object_start is not None:
-        object_end = (rows - 1, cols - 1)
-        if len(objects) > 0 and objects[-1][0][0] == object_start[0]:
-            objects[-1] = (objects[-1][0], object_end)
-        else:
-            objects.append((object_start, object_end))
-    
+        objects.append((object_start, object_end))
     return objects
 
+
 def merge_objects(range_data, threshold_distance):
-    rows = resolution
-    cols = 16
+    rows = 16
+    cols = resolution
     
     # Reshape the data array into a matrix with the specified number of columns
-    matrix = np.reshape(range_data, (resolution, cols))
+    matrix = np.reshape(range_data, (rows,cols))
     # print(matrix)
-    
     return matrix
 
 def run_robot(robot):
