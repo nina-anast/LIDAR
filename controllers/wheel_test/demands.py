@@ -11,8 +11,7 @@ wheel_target_velocity = 100.0
 wheel_angle = 1.5
 
 # Lidar 
-
-threshold_distance = 80.0
+threshold_distance = 15.0
 ignored_distance = 3.0
 resolution = 900
 excluded_layers = 13
