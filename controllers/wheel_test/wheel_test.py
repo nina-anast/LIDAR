@@ -19,11 +19,25 @@ def detect_objects(matrix, threshold_distance):
                         object_start = (row, col)
                 elif object_start is not None:
                     object_end = (row, col)
-                    objects.append((object_start, object_end))
-                    object_start = None
+                    # Check for overlapping indices between current and previous objects
+                    for i in range(len(objects)):
+                        prev_start, prev_end = objects[i]
+                        if any(cols in range(prev_start[0], prev_end[0]) for cols in range(object_start[0], object_end[0])):
+                            # If there's overlap, merge objects
+                            objects[i] = (min(prev_start[0], object_start[0]), min(prev_start[1], object_start[1])), (max(prev_end[0], object_end[0]), max(prev_end[1], object_end[1]))
+                            object_start = None  # Reset object_start as it's merged with previous one
+                            break
+                        else:
+                            # If no overlap with any previous object, delete previous object and append as new object
+                            objects[:] = [obj for obj in objects if obj != (object_start, object_end)]
+                            objects.append((object_start, object_end))
+                            object_start = None
     if object_start is not None:
         objects.append((object_start, object_end))
+        
     return objects
+
+
 
 
 def merge_objects(range_data, threshold_distance):
@@ -70,7 +84,8 @@ def run_robot(robot):
             print("Detected {} objects:".format(len(objects)))
             for obj in objects:
                 start_idx, end_idx = obj
-                print("Object from {} to {}".format(start_idx, end_idx))
+                # print("Object from {} to {}".format(start_idx, end_idx))
+                print(objects)
         else:
             print("No objects detected.")
             # print(len(range_image))
