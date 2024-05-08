@@ -19,15 +19,15 @@
  
  3. Παράλληλα μπορεί να διαβάζεί δεδομένα Lidar Point Cloud αλλά και Rotational Motor για το πηδάλιο
 
+ 4. Κώδικας για αναγνώριση εμποδίων από το lidar point cloud ```range_image = lidar.getRangeImage()```.
+
 
 ## ToDos: 
 
- 1. Κώδικας για αναγνώριση εμποδίων από το lidar point cloud ```range_image = lidar.getRangeImage()```.
+ 1. Έλεγχος κινητήρα μέσω του point cloud
 
- 2. Έλεγχος κινητήρα μέσω του point cloud
+ 2. scan time?
 
  3. Τεχνική Έκθεση
 
  4. Παρουσίαση?
-
- a. scan time
