@@ -10,5 +10,8 @@ wheel_target_velocity = 100.0
 # Set the wheel angle
 wheel_angle = 1.5
 
-# Lidar threshold distance (to locate objects)
+# Lidar 
+
 threshold_distance = 10.0
+resolution = 900
+excluded_layers = 15

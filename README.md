@@ -29,3 +29,7 @@
  3. Τεχνική Έκθεση
 
  4. Παρουσίαση?
+
+ a. scan time
+
+ b. vertical scan for objects
