@@ -74,6 +74,7 @@ def turn_left(position, wheel, propeller, initial_time):
         
         if time_difference >= turn_duration:
             wheel.setPosition(0.0)
+            wheel.setVelocity(0.0)
             propeller.setVelocity(propeller_target_velocity)
             print('Stopped turning')
             return k, wheel, position, None, False  # Stop turning and reset initial_time
@@ -81,5 +82,6 @@ def turn_left(position, wheel, propeller, initial_time):
             return k, wheel, position, initial_time, True  # Continue turning
     else:
         wheel.setPosition(wheel_angle)  # Start turning to the left
+        wheel.setVelocity(wheel_target_velocity)
         propeller.setVelocity(0)
         return k, wheel, position, initial_time, True
