@@ -17,8 +17,8 @@ def Propeller(robot):
 def Wheel(robot):
     # Rotational Motor (wheel)
     wheel = robot.getDevice('wheel')
-    wheel.setPosition(0)  # Set position to infinity for continuous rotation
-    wheel.setVelocity(0)
+    wheel.setPosition(wheel_angle)  # Set position to infinity for continuous rotation
+    wheel.setVelocity(wheel_target_velocity)
     return wheel
 
 def Position(robot):

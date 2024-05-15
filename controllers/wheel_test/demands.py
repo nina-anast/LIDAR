@@ -8,7 +8,7 @@ propeller_target_velocity = 10000.0
 wheel_target_velocity = 10.0
 
 # Set the wheel angle
-wheel_angle = 0.8
+wheel_angle = 1.57
 
 # Lidar 
 threshold_distance = 15.0
