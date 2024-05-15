@@ -63,16 +63,23 @@ def detection_output(robot, range_image):
         print("No objects detected.")
 
 # for Rotational Motor
-def turn(position,wheel,initial_time):
+def turn_left(position, wheel, propeller, initial_time):
     k = position.getValue()
-    if k < wheel_angle + 0.01 and k > wheel_angle - 0.01:
-        if initial_time is None:  # Check if it's the first time entering the if condition
+    if wheel_angle - 0.01 < k < wheel_angle + 0.01:
+        if initial_time is None:
             initial_time = time.time() * 1000.0  # Record the initial time
     
         current_time = time.time() * 1000.0
         time_difference = current_time - initial_time
         
-        if time_difference >= 10000:  # Check if 2 seconds have passed
+        if time_difference >= turn_duration:
             wheel.setPosition(0.0)
-    print(k)
-    return k, wheel, position, initial_time
+            propeller.setVelocity(propeller_target_velocity)
+            print('Stopped turning')
+            return k, wheel, position, None, False  # Stop turning and reset initial_time
+        else:
+            return k, wheel, position, initial_time, True  # Continue turning
+    else:
+        wheel.setPosition(wheel_angle)  # Start turning to the left
+        propeller.setVelocity(0)
+        return k, wheel, position, initial_time, True
