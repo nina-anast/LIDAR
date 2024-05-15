@@ -24,6 +24,7 @@ def run_robot(robot):
         matrix = create_matrix(range_image,threshold_distance)
         objects = detect_objects(matrix, threshold_distance)
         initial_time = detection_output(robot, range_image, position, wheel, initial_time)
+        
         if initial_time is None:
             # Continue moving forward if not turning
             wheel.setVelocity(wheel_target_velocity)
