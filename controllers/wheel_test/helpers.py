@@ -48,19 +48,28 @@ def detect_objects(matrix, threshold_distance):
     return objects
 
 # print detected objects
-def detection_output(robot, range_image):
-    matrix = create_matrix(range_image,threshold_distance)
+def detection_output(robot, range_image, position, wheel, initial_time):
+    matrix = create_matrix(range_image, threshold_distance)
     objects = detect_objects(matrix, threshold_distance)
 
-    # Print detected objects
     if objects:
         print("Detected {} objects:".format(len(objects)))
         for obj in objects:
             start_idx, end_idx = obj
-            # print("Object from {} to {}".format(start_idx, end_idx))
-            print(objects)
+            print("Object from {} to {}".format(start_idx, end_idx))
+            wheel.setVelocity(wheel_target_velocity)
+            wheel.setPosition(wheel_angle)
+            # Call the turn function when an object is detected
+            k, wheel, position, initial_time = turn(position, wheel, initial_time)
+            if initial_time is None:
+                # If the turn is complete, break out of the loop
+                break
     else:
         print("No objects detected.")
+        initial_time = None  # Reset initial_time if no objects detected
+    
+    return initial_time if initial_time is not None else None
+
 
 # for Rotational Motor
 def turn(position,wheel,initial_time):
