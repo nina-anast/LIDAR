@@ -24,7 +24,7 @@ def run_robot(robot):
         if not stop_everything :
             range_image = lidar.getRangeImage()
         
-        initial_time, initial_time_turn, stop_everything = detection_output(robot, range_image, position, wheel, initial_time, stop_everything, initial_time_turn)
+        initial_time, initial_time_turn, stop_everything,propeller = detection_output(robot, range_image, position, wheel, initial_time, stop_everything, initial_time_turn,propeller)
         
         if initial_time is None:
             # Continue moving forward if not turning

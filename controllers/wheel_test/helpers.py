@@ -64,7 +64,7 @@ def detect_objects(matrix, threshold_distance):
 
 
 # print detected objects
-def detection_output(robot, range_image, position, wheel, initial_time, stop_everything, initial_time_turn):
+def detection_output(robot, range_image, position, wheel, initial_time, stop_everything, initial_time_turn,propeller):
     matrix = create_matrix(range_image, threshold_distance)
     objects = detect_objects(matrix, threshold_distance)
     # print(matrix)
@@ -89,30 +89,28 @@ def detection_output(robot, range_image, position, wheel, initial_time, stop_eve
                 break
     else:
         # print("No objects detected.")
-        k, wheel, position, initial_time_turn = turn(position, wheel, initial_time_turn)
+        k, propeller, wheel, position, initial_time_turn = turn(position, propeller, wheel, initial_time_turn)
         start_idx, end_idx = None, None
         initial_time = None  # Reset initial_time if no objects detected
 
-    return initial_time if initial_time is not None else None, initial_time_turn, stop_everything
+    return initial_time if initial_time is not None else None, initial_time_turn, stop_everything, propeller
 
 
-def turn(position, wheel, initial_time_turn):
+def turn(position,propeller, wheel, initial_time_turn):
     k = position.getValue()
     if wheel_angle - 0.01 < k < wheel_angle + 0.01:
         if initial_time_turn is None:  # Check if it's the first time entering the if condition
             initial_time_turn = time.time() * 1000.0  # Record the initial time
-            print(initial_time_turn)
+            propeller.setVelocity(0.0)
 
         current_time = time.time() * 1000.0
         time_difference = current_time - initial_time_turn
 
-        if time_difference >= 10000:  # Check if 2 seconds have passed
+        if time_difference >= 100:  # Check if 2 seconds have passed
             print('time passed')
             wheel.setPosition(0.0)
             wheel.setVelocity(wheel_target_velocity)
+            propeller.setVelocity(propeller_target_velocity)
             initial_time = None
-    else:
-        wheel.setVelocity(wheel_target_velocity)  # Set wheel's velocity to target velocity
-        print('start turning')
     print(k)
-    return k, wheel, position, initial_time_turn
+    return k,propeller, wheel, position, initial_time_turn

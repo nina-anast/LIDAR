@@ -2,13 +2,13 @@
 timestep = 32
 
 # Set initial velocity of propeller (adjust as needed)
-propeller_target_velocity = 10000.0
+propeller_target_velocity = 1000.0
 
 # Set initial velocity of wheel (adjust as needed)
-wheel_target_velocity = 0.5
+wheel_target_velocity = 0.6
 
 # Set the wheel angle
-wheel_angle = 0.8
+wheel_angle = -0.296
 
 # Lidar 
 threshold_distance = 15.0
