@@ -16,11 +16,14 @@ def run_robot(robot):
     # Initialize angle and time
     k = 0
     initial_time = None  # Initialize initial_time variable outside the loop
+    stop_everything = False
 
     while robot.step(timestep) != -1:
-        range_image = lidar.getRangeImage()
+
+        if not stop_everything :
+            range_image = lidar.getRangeImage()
         
-        initial_time = detection_output(robot, range_image, position, wheel, initial_time)
+        initial_time, stop_everything = detection_output(robot, range_image, position, wheel, initial_time,stop_everything)
         
         if initial_time is None:
             # Continue moving forward if not turning
