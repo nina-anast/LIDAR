@@ -5,7 +5,7 @@ timestep = 32
 propeller_target_velocity = 10000.0
 
 # Set initial velocity of wheel (adjust as needed)
-wheel_target_velocity = 10.0
+wheel_target_velocity = 0.5
 
 # Set the wheel angle
 wheel_angle = 0.8

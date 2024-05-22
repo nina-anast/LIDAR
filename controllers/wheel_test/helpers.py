@@ -64,7 +64,7 @@ def detect_objects(matrix, threshold_distance):
 
 
 # print detected objects
-def detection_output(robot, range_image, position, wheel, initial_time,stop_everything):
+def detection_output(robot, range_image, position, wheel, initial_time, stop_everything, initial_time_turn):
     matrix = create_matrix(range_image, threshold_distance)
     objects = detect_objects(matrix, threshold_distance)
     # print(matrix)
@@ -86,28 +86,33 @@ def detection_output(robot, range_image, position, wheel, initial_time,stop_ever
             # Call the turn function when an object is detected
             if initial_time is None:
                 # If the turn is complete, break out of the loop
-                break       
+                break
     else:
-        print("No objects detected.")
-        k, wheel, position, initial_time = turn(position, wheel, initial_time)
+        # print("No objects detected.")
+        k, wheel, position, initial_time_turn = turn(position, wheel, initial_time_turn)
         start_idx, end_idx = None, None
         initial_time = None  # Reset initial_time if no objects detected
-    
-    return initial_time if initial_time is not None else None, stop_everything
+
+    return initial_time if initial_time is not None else None, initial_time_turn, stop_everything
 
 
-# for Rotational Motor
-def turn(position,wheel,initial_time):
+def turn(position, wheel, initial_time_turn):
     k = position.getValue()
-    if k < wheel_angle + 0.01 and k > wheel_angle - 0.01:
-        if initial_time is None:  # Check if it's the first time entering the if condition
-            initial_time = time.time() * 1000.0  # Record the initial time
-    
+    if wheel_angle - 0.01 < k < wheel_angle + 0.01:
+        if initial_time_turn is None:  # Check if it's the first time entering the if condition
+            initial_time_turn = time.time() * 1000.0  # Record the initial time
+            print(initial_time_turn)
+
         current_time = time.time() * 1000.0
-        time_difference = current_time - initial_time
-        
-        if time_difference >= 1000:  # Check if 2 seconds have passed
+        time_difference = current_time - initial_time_turn
+
+        if time_difference >= 10000:  # Check if 2 seconds have passed
+            print('time passed')
             wheel.setPosition(0.0)
-            # initial_time = None
+            wheel.setVelocity(wheel_target_velocity)
+            initial_time = None
+    else:
+        wheel.setVelocity(wheel_target_velocity)  # Set wheel's velocity to target velocity
+        print('start turning')
     print(k)
-    return k, wheel, position, initial_time
+    return k, wheel, position, initial_time_turn
