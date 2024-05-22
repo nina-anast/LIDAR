@@ -6,14 +6,15 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.10045129176483192 0.14152421346560978 0.9848250783696144 1.2490203379997424
-  position -45.5687449320348 -130.35294663812354 30.007600438620898
+  orientation 0.34507390560236123 -0.14088449514346912 -0.9279415707362735 3.865874669238153
+  position 252.60639381824848 -270.64287693647094 305.31799313751293
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 DEF ship Robot {
+  translation 10.06 0 0
   children [
     HingeJoint {
       jointParameters HingeJointParameters {
@@ -112,7 +113,7 @@ DEF ship Robot {
       translation 4.25 0 1.5
       horizontalResolution 900
       fieldOfView 6.28319
-      verticalFieldOfView 0.523599
+      verticalFieldOfView 0.1
       numberOfLayers 16
       minRange 0.2
       maxRange 80
@@ -1064,7 +1065,7 @@ DEF water Fluid {
   boundingObject USE S
 }
 DEF ball Solid {
-  translation 51.27 0 1.12
+  translation 51.27 2.05 1.12
   children [
     Shape {
       appearance PBRAppearance {
@@ -1075,6 +1076,28 @@ DEF ball Solid {
       }
     }
   ]
+  immersionProperties [
+    DEF water ImmersionProperties {
+      fluidName "water"
+      dragForceCoefficients 0.01 0 0
+      dragTorqueCoefficients 1 0 0
+      viscousResistanceTorqueCoefficient 0.005
+    }
+  ]
+}
+DEF ball Solid {
+  translation 25.51 27.75 1.12
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.5 1
+      }
+      geometry Sphere {
+        radius 8
+      }
+    }
+  ]
+  name "solid(1)"
   immersionProperties [
     DEF water ImmersionProperties {
       fluidName "water"

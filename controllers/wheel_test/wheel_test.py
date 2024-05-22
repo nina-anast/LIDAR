@@ -19,10 +19,7 @@ def run_robot(robot):
 
     while robot.step(timestep) != -1:
         range_image = lidar.getRangeImage()
-        k, wheel, position, initial_time = turn(position,wheel,initial_time)
         
-        matrix = create_matrix(range_image,threshold_distance)
-        objects = detect_objects(matrix, threshold_distance)
         initial_time = detection_output(robot, range_image, position, wheel, initial_time)
         
         if initial_time is None:

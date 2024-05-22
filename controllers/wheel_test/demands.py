@@ -14,4 +14,4 @@ wheel_angle = 0.8
 threshold_distance = 15.0
 ignored_distance = 3.0
 resolution = 900
-excluded_layers = 13
+excluded_layers = 15

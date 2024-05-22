@@ -5,10 +5,19 @@ from demands import *
 def create_matrix(range_data, threshold_distance):
     rows = 16
     cols = resolution
-    
-    # Reshape the data array into a matrix with the specified number of columns
     matrix = np.reshape(range_data, (rows,cols))
+    '''
+    # Initialize an empty matrix with the specified number of rows and columns
+    matrix = np.zeros((rows, cols))
+    
+    # Fill the matrix according to the specified pattern
+    for i in range(len(range_data)):
+        row = i % rows
+        col = i // rows
+        matrix[row, col] = range_data[i]
+
     # print(matrix)
+    '''
     return matrix
 
 def define_objects(objects,object_start,object_end):
@@ -40,17 +49,30 @@ def detect_objects(matrix, threshold_distance):
                 if distance < threshold_distance:
                     if object_start is None:
                         object_start = (row, col)
-                elif object_start is not None:
-                    object_end = (row, col)
-                    objects, object_start = define_objects(objects,object_start,object_end)
-    if object_start is not None:
-        objects.append((object_start, object_end))
+                else:
+                    if object_start is not None:
+                        object_end = (row, col-1)
+                        objects.append((object_start, object_end))
+                        object_start = None
+                        # objects, object_start = define_objects(objects,object_start,object_end)
+            else:
+                if object_start is not None:
+                    object_end = (row, col - 1)
+                    objects.append((object_start, object_end))
+                    object_start = None
+        # Handle case where the row ends with an object part
+        if object_start is not None:
+            object_end = (row, cols - 1)
+            objects.append((object_start, object_end))
+            object_start = None
+            
     return objects
 
 # print detected objects
 def detection_output(robot, range_image, position, wheel, initial_time):
     matrix = create_matrix(range_image, threshold_distance)
     objects = detect_objects(matrix, threshold_distance)
+    # print(matrix)
 
     if objects:
         print("Detected {} objects:".format(len(objects)))
@@ -58,11 +80,11 @@ def detection_output(robot, range_image, position, wheel, initial_time):
             start_idx, end_idx = obj
             print("Object from {} to {}".format(start_idx, end_idx))
             print(start_idx[1])
-            if start_idx[1] < 300:
+            '''if start_idx[1] < 300 :
                 print("Object too close, not turning")
                 wheel.setVelocity(0.0)
                 wheel.setPosition(0.0)
-                continue  # Skip turning and proceed to the next object
+                continue  # Skip turning and proceed to the next object'''
             wheel.setVelocity(wheel_target_velocity)
             wheel.setPosition(wheel_angle)
             # Call the turn function when an object is detected
