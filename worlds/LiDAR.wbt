@@ -1085,25 +1085,3 @@ DEF ball Solid {
     }
   ]
 }
-DEF ball Solid {
-  translation 25.51 27.75 1.12
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 1 0.5 1
-      }
-      geometry Sphere {
-        radius 8
-      }
-    }
-  ]
-  name "solid(1)"
-  immersionProperties [
-    DEF water ImmersionProperties {
-      fluidName "water"
-      dragForceCoefficients 0.01 0 0
-      dragTorqueCoefficients 1 0 0
-      viscousResistanceTorqueCoefficient 0.005
-    }
-  ]
-}

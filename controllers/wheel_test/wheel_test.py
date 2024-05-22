@@ -18,8 +18,15 @@ def run_robot(robot):
     initial_time = None  # Initialize initial_time variable outside the loop
     initial_time_turn = None
     stop_everything = False
+    start = time.time() * 1000
 
     while robot.step(timestep) != -1:
+
+        end = time.time() * 1000
+        time_elapsed = end - start
+        if time_elapsed >= 30000:
+            propeller.setVelocity(0.0) 
+            break
 
         if not stop_everything :
             range_image = lidar.getRangeImage()
