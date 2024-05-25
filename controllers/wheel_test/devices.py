@@ -7,6 +7,7 @@ def Lidar_sensor(robot):
     lidar.enable(timestep)
     return lidar
 
+'''
 def Propeller(robot):
 
     propeller = robot.getDevice('motor')
@@ -26,3 +27,4 @@ def Position(robot):
     position = robot.getDevice("position")
     position.enable(timestep)
     return position
+'''

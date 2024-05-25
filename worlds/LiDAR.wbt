@@ -225,7 +225,7 @@ DEF ship Robot {
       angular 0.5
     }
   }
-  controller "wheel_test"
+  controller "real_lidar"
 }
 Solid {
   children [

@@ -9,6 +9,7 @@ def run_robot(robot):
 
     # Initialize Devices
     lidar = Lidar_sensor(robot)
+    '''
     propeller = Propeller(robot)
     wheel = Wheel(robot)
     position = Position(robot)
@@ -18,6 +19,7 @@ def run_robot(robot):
     initial_time = None  # Initialize initial_time variable outside the loop
     initial_time_turn = None
     stop_everything = False
+    '''
     # start = time.time() * 1000
 
     while robot.step(timestep) != -1:
@@ -30,14 +32,16 @@ def run_robot(robot):
             break
         '''
 
-        if not stop_everything :
-            range_image = lidar.getRangeImage()
+        # if not stop_everything :
+        range_image = lidar.getRangeImage()
         
-        initial_time, initial_time_turn, stop_everything,propeller = detection_output(robot, range_image, position, wheel, initial_time, stop_everything, initial_time_turn,propeller)
+        initial_time_turn, stop_everything= detection_output(robot, range_image, stop_everything, initial_time_turn)
         
+        '''
         if initial_time is None:
             # Continue moving forward if not turning
             wheel.setVelocity(wheel_target_velocity)
+        '''
 
         # print(len(range_image))
         # print("{}".format(range_image))

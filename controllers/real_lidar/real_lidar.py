@@ -1,23 +1,39 @@
 import numpy as np
 import time
-from demands import *
+from controller import Robot
+
+# Constants
+threshold_distance = 15.0
+ignored_distance = 3.0
+resolution = 900
+excluded_layers = 15
+timestep = 32
+
+def transform_data(range_data):
+    transformed_data = []
+    for data in range_data:
+        transformed_data.append(int.from_bytes(data, byteorder='big', signed=True))
+    return transformed_data
+
+def Lidar_sensor(robot):
+    lidar = robot.getDevice('lidar')
+    lidar.enable(timestep)
+    return lidar
+
+# Create the Robot instance.
+robot = Robot()
+
+lidar = Lidar_sensor(robot)
+
+# Get the time step of the current world.
+timestep = int(robot.getBasicTimeStep())
 
 def create_matrix(range_data, threshold_distance):
     rows = 16
     cols = resolution
-    matrix = np.reshape(range_data, (rows,cols))
-    '''
-    # Initialize an empty matrix with the specified number of rows and columns
-    matrix = np.zeros((rows, cols))
-    
-    # Fill the matrix according to the specified pattern
-    for i in range(len(range_data)):
-        row = i % rows
-        col = i // rows
-        matrix[row, col] = range_data[i]
-
-    # print(matrix)
-    '''
+    matrix = np.reshape(range_data, (rows, cols))
+    # matrix = np.reshape(range_data, (cols, rows))
+    # matrix = matrix.transpose()
     return matrix
 
 def define_objects(objects, object_start, object_end):
@@ -32,7 +48,6 @@ def define_objects(objects, object_start, object_end):
     if not merged:
         objects.append((object_start, object_end))
     return objects
-
 
 def detect_objects(matrix, threshold_distance):
     objects = []
@@ -62,12 +77,12 @@ def detect_objects(matrix, threshold_distance):
             object_start = None
     return objects
 
-
-# print detected objects
-def detection_output(robot, range_image, initial_time, stop_everything, initial_time_turn,propeller):
+def detection_output(robot, range_image, stop_everything):
+    # in case we have bytes
+    # transformed_data = transform_data(range_image)
+    # matrix = create_matrix(transformed_data, threshold_distance)
     matrix = create_matrix(range_image, threshold_distance)
     objects = detect_objects(matrix, threshold_distance)
-    # print(matrix)
 
     if objects and not stop_everything:
         stop_everything = True
@@ -75,43 +90,16 @@ def detection_output(robot, range_image, initial_time, stop_everything, initial_
         for obj in objects:
             start_idx, end_idx = obj
             print("Object from {} to {}".format(start_idx, end_idx))
-            # print(start_idx[1])
-            '''if start_idx[1] < 300 :
-                print("Object too close, not turning")
-                wheel.setVelocity(0.0)
-                wheel.setPosition(0.0)
-                continue  # Skip turning and proceed to the next object'''
-            # wheel.setVelocity(wheel_target_velocity)
-            # wheel.setPosition(wheel_angle)
-            # Call the turn function when an object is detected
-            if initial_time is None:
-                # If the turn is complete, break out of the loop
-                break
     else:
-        # print("No objects detected.")
-        # k, propeller, wheel, position, initial_time_turn = turn(position, propeller, wheel, initial_time_turn)
         start_idx, end_idx = None, None
-        initial_time = None  # Reset initial_time if no objects detected
 
-    return initial_time if initial_time is not None else None, initial_time_turn, stop_everything # , propeller
+    return stop_everything
 
-'''
-def turn(position,propeller, wheel, initial_time_turn):
-    k = position.getValue()
-    if wheel_angle - 0.01 < k < wheel_angle + 0.01:
-        if initial_time_turn is None:  # Check if it's the first time entering the if condition
-            initial_time_turn = time.time() * 1000.0  # Record the initial time
-            propeller.setVelocity(0.0)
-
-        current_time = time.time() * 1000.0
-        time_difference = current_time - initial_time_turn
-
-        if time_difference >= 100:  # Check if 2 seconds have passed
-            print('time passed')
-            wheel.setPosition(0.0)
-            wheel.setVelocity(wheel_target_velocity)
-            propeller.setVelocity(propeller_target_velocity)
-            initial_time = None
-    print(k)
-    return k,propeller, wheel, position, initial_time_turn
-'''
+# Main loop:
+stop_everything = False
+while robot.step(timestep) != -1:
+    # Read the distance sensor data
+    range_image = lidar.getRangeImage()
+    
+    # Call the detection_output function
+    stop_everything = detection_output(robot, range_image, stop_everything)
