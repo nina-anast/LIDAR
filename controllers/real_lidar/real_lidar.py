@@ -1,6 +1,6 @@
 import numpy as np
 import time
-from controller import Robot
+from controller import Robot # type: ignore
 
 # Constants
 threshold_distance = 15.0
